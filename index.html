@@ -1,0 +1,84 @@
+<!DOCTYPE html>
+<html lang="en" ng-app="myApp">
+
+<head>
+    <meta charset="UTF-8">
+    <title>WeatherApp</title>
+    <!-- bower:css -->
+    <link rel="stylesheet" href="bower_components/angular-toastr/dist/angular-toastr.css" />
+    <!-- endbower -->
+    <!-- inject:css -->
+    <link rel="stylesheet" href="/app/styles/styles.css">
+    <!-- endinject -->
+</head>
+
+<body ng-controller="WeatherController as vm">
+    <!-- bower:js -->
+    <script src="bower_components/angular/angular.js"></script>
+    <script src="bower_components/jquery/dist/jquery.js"></script>
+    <script src="bower_components/bootstrap/dist/js/bootstrap.js"></script>
+    <script src="bower_components/angular-toastr/dist/angular-toastr.tpls.js"></script>
+    <script src="bower_components/angular-animate/angular-animate.js"></script>
+    <!-- endbower -->
+    <div class="container" id="topDiv">
+        <h1>Weather App</h1>
+        <br/>
+        <input type="text" id="city" placeholder="Enter city here" ng-model="vm.city">
+        <button ng-click="vm.getWeather(vm.city) ;table = !table">Check Weather!</button>
+        <pre>{{ vm.weather.name  }}</pre>
+        <br>
+    </div>
+    <table id="table" ng-show="table" cellspacing="10px;">
+        <thead>
+            <h1 ng-show="table">results</h1>
+            <tbody>
+                <tr>
+                    <th>Humidity</th>
+                    <th ng-hide="row.booleanVal">Temperature &deg;F</th>
+                    <th ng-show="row.booleanVal">Temperature &deg;C</th>
+                    <th ng-hide="row.booleanVal">Min Temp &deg;F</th>
+                    <th ng-show="row.booleanVal">Min Temp &deg;C</th>
+                    <th ng-hide="row.booleanVal">Max Temp &deg;F</th>
+                    <th ng-show="row.booleanVal">Max Temp &deg;C</th>
+                    <th>Wind Speed</th>
+                    <th>Pressure</th>
+                </tr>
+                <tr>
+                    <td>{{vm.weather.main.humidity}}</td>
+                    <td ng-hide="row.booleanVal">{{vm.farenheit}}</td>
+                    <td ng-show="row.booleanVal">{{vm.celsius}}</td>
+                    <td ng-hide="row.booleanVal">{{vm.minFarenheit}}</td>
+                    <td ng-show="row.booleanVal">{{vm.minCelsius}}</td>
+                    <td ng-hide="row.booleanVal">{{vm.maxFarenheit}}</td>
+                    <td ng-show="row.booleanVal">{{vm.maxCelsius}}</td>
+                    <td>{{vm.weather.wind.speed}}</td>
+                    <td>{{vm.weather.main.pressure}}</td>
+                </tr>
+            </tbody>
+        </thead>
+    </table>
+    <div id="history">
+        <h2 ng-show="table">Search History</h2>
+        <span ng-repeat="item in vm.searchHistory | limitTo: -5">
+                <button type="button" class="btn btn-primary" ng-click="vm.getWeather(item.name)">{{item.name}}</button>
+                </span>
+        <div ng-repeat="item in vm.searchHistory | limitTo: -5">
+            <p><strong>City</strong>: {{item.name}} <strong>Date Searched</strong>: {{item.date | date:'yyyy-MM-dd hh:mm:ss a'}}</p>
+        </div>
+    </div>
+    <div ng-show="table" id="toggle">
+        <!-- Rectangular switch -->
+        <!-- Rounded switch --><span>farenheit</span>
+        <label class="switch">
+            <input type="checkbox" ng-click="row.booleanVal = !row.booleanVal">
+            <div class="slider round"></div>
+        </label><span>celsius</span>
+    </div>
+    <!-- inject:js -->
+    <script src="/app/app.js"></script>
+    <script src="/app/weather.controller.js"></script>
+    <script src="/app/weather.factory.js"></script>
+    <!-- endinject -->
+</body>
+
+</html>
